@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from app.utils.notion_integration import add_to_notion_table
+from app.utils.notion_integration import add_to_notion_table, create_daily_read_page
 from app.utils.gmail_integration import get_todays_emails
 
 app = Flask(__name__)
@@ -18,6 +18,9 @@ def load_emails_to_notion():
     emails = get_todays_emails()
     if not emails:
         return jsonify({"error": "No emails found"}), 400
+    
+    # Create 'daily read' page if it doesn't exist
+    create_daily_read_page()
     
     for email in emails:
         data = {
