@@ -27,6 +27,7 @@ Create a `.env` file in the root directory of the project and add the following 
 NOTION_TOKEN=your_notion_integration_token
 NOTION_DATABASE_ID=your_notion_database_id
 NOTION_PAGE_ID=your_notion_page_id
+GROQ_API_KEY=your_groq_api_key
 ```
 
 ## Running the Application
@@ -44,3 +45,5 @@ python app/app.py
 ```
 
 3. Use the `/load_emails_to_notion` endpoint to load today's emails into Notion.
+
+4. Use the `/create_social_post` endpoint to create a social media post using GROQ LLaMA3 70B. Send a POST request with JSON data containing the `content` field to this endpoint. The response will contain the generated social media post.
