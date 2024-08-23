@@ -8,6 +8,11 @@ from googleapiclient.errors import HttpError
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+import json
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # If modifying these SCOPES, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
@@ -70,7 +75,7 @@ def get_todays_emails():
     creds = authenticate_gmail()
     service = build('gmail', 'v1', credentials=creds)
     today = datetime.date.today().strftime("%Y/%m/%d")
-    query = f'after:{today}'
+    query = f'after:{today} newsletter'
     messages = search_emails(service, query)
     emails = []
     if messages:
@@ -79,3 +84,10 @@ def get_todays_emails():
             if email_data:
                 emails.append(email_data)
     return emails
+
+def load_clients_json():
+    clients_path = os.getenv('CLIENTS_PATH_NAME')
+    if clients_path and os.path.exists(clients_path):
+        with open(clients_path, 'r') as file:
+            return json.load(file)
+    return None
