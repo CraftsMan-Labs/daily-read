@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notion Page</title>
+    <script>
+        async function createSocialPost() {
+            const content = document.getElementById('contentInput').value;
+            const response = await fetch('/create_social_post', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content })
+            });
+            const data = await response.json();
+            document.getElementById('response').innerText = data.social_post;
+        }
+    </script>
+</head>
+<body>
+    <h1>Notion Page</h1>
+    <textarea id="contentInput" placeholder="Enter text here..."></textarea>
+    <button onclick="createSocialPost()">Create Social Post</button>
+    <p id="response"></p>
+</body>
+</html>
