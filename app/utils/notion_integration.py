@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Initialize the Notion client
-notion = Client(auth=os.environ["NOTION_TOKEN"])
+notion = Client(auth=os.environ["NOTION_API_KEY"])
 
 def check_template_exists(database_id):
     """Check if the template database exists."""
@@ -63,11 +63,41 @@ def add_to_notion_table(data):
     except Exception as e:
         return f"Error adding data: {str(e)}"
 
-# Example usage:
-# data = {
-#     "Name": {"title": [{"text": {"content": "New Task"}}]},
-#     "Description": {"rich_text": [{"text": {"content": "This is a new task."}}]},
-#     "Status": {"select": {"name": "To Do"}}
-# }
-# result = add_to_notion_table(data)
-# print(result)
+def create_daily_read_page():
+    """
+    Create a 'daily read' page if it doesn't exist.
+    
+    :return: String indicating success or failure
+    """
+    page_title = "daily read"
+    database_id = os.environ["NOTION_DATABASE_ID"]
+    
+    # Check if the 'daily read' page already exists
+    try:
+        response = notion.databases.query(
+            **{
+                "database_id": database_id,
+                "filter": {
+                    "property": "Name",
+                    "title": {
+                        "equals": page_title
+                    }
+                }
+            }
+        )
+        if response["results"]:
+            return "Page already exists"
+    except Exception as e:
+        return f"Error checking page existence: {str(e)}"
+    
+    # Create the 'daily read' page
+    try:
+        notion.pages.create(
+            parent={"database_id": database_id},
+            properties={
+                "Name": {"title": [{"text": {"content": page_title}}]}
+            }
+        )
+        return "Page created successfully"
+    except Exception as e:
+        return f"Error creating page: {str(e)}"
