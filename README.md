@@ -38,10 +38,10 @@ GROQ_API_KEY=your_groq_api_key
 pip install -r requirements.txt
 ```
 
-2. Run the Flask application:
+2. Run the FastAPI application:
 
 ```
-python app/app.py
+uvicorn app.main:app --reload
 ```
 
 3. Use the `/load_emails_to_notion` endpoint to load today's emails into Notion.
