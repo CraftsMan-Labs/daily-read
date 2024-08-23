@@ -15,4 +15,4 @@ def generate_social_post(content, api_key):
     if response.status_code == 200:
         return response.json()
     else:
-        return {"error": response.text}
+return {"error": response.text}
